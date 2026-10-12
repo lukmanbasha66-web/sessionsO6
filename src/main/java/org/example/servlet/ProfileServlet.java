@@ -1,0 +1,42 @@
+
+package org.example.servlet;
+
+import java.io.IOException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@WebServlet("/profile")
+public class ProfileServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request,
+                         HttpServletResponse response)
+            throws IOException {
+
+        HttpSession session = request.getSession(false);
+
+        if (session == null ||
+                session.getAttribute("username") == null) {
+
+            response.sendRedirect("login.html");
+            return;
+        }
+
+        String username =
+                (String) session.getAttribute("username");
+
+        response.setContentType("text/html");
+
+        response.getWriter().println(
+                "<html><body>" +
+                        "<h2>User Profile</h2>" +
+                        "<p>Logged in user: " + username + "</p>" +
+                        "<a href='home'>Back to Home</a><br><br>" +
+                        "<a href='logout'>Logout</a>" +
+                        "</body></html>"
+        );
+    }
+}
